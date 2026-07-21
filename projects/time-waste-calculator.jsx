@@ -215,7 +215,7 @@ export default function TimeWasteCalculator() {
   return (
     <div style={styles.page}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap');
         * { box-sizing: border-box; }
         .twc-option:hover { border-color: #C9A227 !important; background: #28395C !important; }
         .twc-option:focus-visible { outline: 2px solid #C9A227; outline-offset: 2px; }
@@ -415,7 +415,7 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     padding: "48px 20px",
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
   },
   container: {
     width: "100%",
@@ -426,7 +426,7 @@ const styles = {
     marginBottom: 28,
   },
   eyebrow: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 11,
     letterSpacing: "0.14em",
     color: tokens.brass,
@@ -434,7 +434,7 @@ const styles = {
     fontWeight: 500,
   },
   h1: {
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'Outfit', sans-serif",
     fontWeight: 600,
     fontSize: "clamp(24px, 5vw, 34px)",
     color: tokens.textPrimary,
@@ -462,13 +462,13 @@ const styles = {
     gap: 6,
   },
   entryLabel: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 12,
     letterSpacing: "0.08em",
     color: tokens.brass,
   },
   entryCategory: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 12,
     color: tokens.textMuted,
     textTransform: "uppercase",
@@ -487,7 +487,7 @@ const styles = {
     transition: "width 0.4s ease",
   },
   prompt: {
-    fontFamily: "'Fraunces', serif",
+    fontFamily: "'Outfit', sans-serif",
     fontSize: 20,
     fontWeight: 500,
     color: tokens.textPrimary,
@@ -506,7 +506,7 @@ const styles = {
     borderRadius: 9,
     padding: "13px 16px",
     color: tokens.textPrimary,
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
     fontSize: 14.5,
     cursor: "pointer",
     transition: "border-color 0.15s ease, background 0.15s ease",
@@ -527,7 +527,7 @@ const styles = {
     padding: "12px 16px",
   },
   inputPrefix: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 20,
     color: tokens.brass,
   },
@@ -536,14 +536,14 @@ const styles = {
     background: "transparent",
     border: "none",
     outline: "none",
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 22,
     color: tokens.textPrimary,
     width: "100%",
     MozAppearance: "textfield",
   },
   inputSuffix: {
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
     fontSize: 13,
     color: tokens.textMuted,
     whiteSpace: "nowrap",
@@ -561,7 +561,7 @@ const styles = {
     fontSize: 13.5,
     cursor: "pointer",
     padding: "6px 4px",
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
   },
   skipBtn: {
     background: "none",
@@ -572,11 +572,11 @@ const styles = {
     textDecoration: "underline",
     textUnderlineOffset: "3px",
     marginLeft: "auto",
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
     transition: "color 0.15s ease",
   },
   resultLabel: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 12,
     letterSpacing: "0.12em",
     color: tokens.brass,
@@ -595,14 +595,14 @@ const styles = {
     textAlign: "center",
   },
   tallyNumber: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: "clamp(32px, 8vw, 44px)",
     fontWeight: 600,
     color: tokens.paper,
     lineHeight: 1,
   },
   tallyUnit: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 11,
     color: tokens.textMuted,
     letterSpacing: "0.06em",
@@ -619,7 +619,7 @@ const styles = {
     marginBottom: 20,
   },
   breakdownTitle: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 11,
     letterSpacing: "0.08em",
     color: tokens.textMuted,
@@ -638,7 +638,7 @@ const styles = {
     color: tokens.textPrimary,
   },
   breakdownHours: {
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     color: tokens.brass,
     fontSize: 13,
   },
@@ -658,7 +658,7 @@ const styles = {
     textDecoration: "none",
     borderRadius: 9,
     padding: "14px 20px",
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
     cursor: "pointer",
   },
   restartBtn: {
@@ -671,13 +671,13 @@ const styles = {
     textDecoration: "underline",
     textUnderlineOffset: "3px",
     cursor: "pointer",
-    fontFamily: "'Work Sans', sans-serif",
+    fontFamily: "'Raleway', sans-serif",
     transition: "color 0.15s ease",
   },
   footerNote: {
     textAlign: "center",
     marginTop: 16,
-    fontFamily: "'IBM Plex Mono', monospace",
+    fontFamily: "'Poppins', sans-serif",
     fontSize: 11,
     color: tokens.textMuted,
     minHeight: 16,

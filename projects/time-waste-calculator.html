@@ -6,7 +6,7 @@
 <title>Time Waste Calculator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1D1145;
@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     padding: 48px 20px;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
   }
 
   button, input {
@@ -75,16 +75,16 @@
   }
 
   .twc-eyebrow {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 11px;
     letter-spacing: 0.14em;
     color: var(--brass);
     margin-bottom: 14px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   .twc-h1 {
-    font-family: 'Fraunces', serif;
+    font-family: 'Outfit', sans-serif;
     font-weight: 600;
     font-size: clamp(24px, 5vw, 34px);
     color: var(--text-primary);
@@ -116,14 +116,14 @@
   }
 
   .twc-entry-label {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 12px;
     letter-spacing: 0.08em;
     color: var(--brass);
   }
 
   .twc-entry-category {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 12px;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -145,7 +145,7 @@
   }
 
   .twc-prompt {
-    font-family: 'Fraunces', serif;
+    font-family: 'Outfit', sans-serif;
     font-size: 20px;
     font-weight: 500;
     color: var(--text-primary);
@@ -166,7 +166,7 @@
     border-radius: 9px;
     padding: 13px 16px;
     color: var(--text-primary);
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-size: 14.5px;
     cursor: pointer;
     transition: border-color 0.15s ease, background 0.15s ease;
@@ -192,7 +192,7 @@
   }
 
   .twc-input-prefix {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 20px;
     color: var(--brass);
   }
@@ -202,7 +202,7 @@
     background: transparent;
     border: none;
     outline: none;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 22px;
     color: var(--text-primary);
     width: 100%;
@@ -210,7 +210,7 @@
   }
 
   .twc-input-suffix {
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     font-size: 13px;
     color: var(--text-muted);
     white-space: nowrap;
@@ -228,7 +228,7 @@
     border: none;
     border-radius: 9px;
     padding: 14px 20px;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     cursor: pointer;
     box-sizing: border-box;
   }
@@ -254,7 +254,7 @@
     font-size: 13.5px;
     cursor: pointer;
     padding: 6px 4px;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
   }
   .twc-ghost-btn[hidden] { visibility: hidden; }
 
@@ -267,12 +267,12 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     margin-left: auto;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     transition: color 0.15s ease;
   }
 
   .twc-result-label {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 12px;
     letter-spacing: 0.12em;
     color: var(--brass);
@@ -292,7 +292,7 @@
   .twc-tally-block { text-align: center; }
 
   .twc-tally-number {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: clamp(32px, 8vw, 44px);
     font-weight: 600;
     color: var(--paper);
@@ -302,7 +302,7 @@
   .twc-tally-number.twc-accent { color: var(--sage); }
 
   .twc-tally-unit {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 11px;
     color: var(--text-muted);
     letter-spacing: 0.06em;
@@ -322,7 +322,7 @@
   }
 
   .twc-breakdown-title {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 11px;
     letter-spacing: 0.08em;
     color: var(--text-muted);
@@ -340,7 +340,7 @@
   }
 
   .twc-breakdown-hours {
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     color: var(--brass);
     font-size: 13px;
   }
@@ -362,14 +362,14 @@
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
-    font-family: 'Work Sans', sans-serif;
+    font-family: 'Raleway', sans-serif;
     transition: color 0.15s ease;
   }
 
   .twc-footer-note {
     text-align: center;
     margin-top: 16px;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: 'Poppins', sans-serif;
     font-size: 11px;
     color: var(--text-muted);
     min-height: 16px;
