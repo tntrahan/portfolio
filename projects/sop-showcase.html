@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Before &rarr; After: SOP Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1D1145;
+    --ink-light: #2A1B5C;
+    --ink-lighter: #3A2A72;
+    --paper: #F2EFE6;
+    --accent: #0DB4B9;   /* Trapper Keeper green */
+    --accent-dim: #0A8A8E;
+    --secondary: #E76D89; /* Modern Pink Backpack */
+    --tertiary: #F2A1A1;  /* Pink Boot */
+    --text-primary: #F2EFE6;
+    --text-muted: #B8AEDD;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px 60px;
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  button, a { font-family: inherit; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-delay: 0ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 720px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(26px, 5.5vw, 38px);
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .h1 em {
+    font-style: normal;
+    color: var(--secondary);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .tab {
+    background: transparent;
+    border: 1px solid var(--ink-lighter);
+    color: var(--text-muted);
+    font-size: 13.5px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 500;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .tab:hover { border-color: var(--accent); color: var(--text-primary); }
+  .tab.is-active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* Segmented toggle */
+  .toggle-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+  .segmented {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink-light);
+    border: 1px solid var(--ink-lighter);
+    border-radius: 999px;
+    padding: 5px;
+  }
+  .seg-highlight {
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    width: 100px;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: left 0.32s cubic-bezier(0.65,0,0.35,1), width 0.32s cubic-bezier(0.65,0,0.35,1);
+    z-index: 0;
+  }
+  .seg-btn {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    padding: 9px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+  }
+  .seg-btn.is-active { color: var(--ink); font-weight: 600; }
+  .seg-btn:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
+  .seg-arrow {
+    position: relative;
+    z-index: 1;
+    color: var(--secondary);
+    font-size: 14px;
+    transition: transform 0.3s ease;
+  }
+  .seg-arrow.is-pulsing { animation: arrowPulse 0.5s ease; }
+  @keyframes arrowPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); color: var(--tertiary); }
+    100% { transform: scale(1); }
+  }
+
+  /* Stage / card */
+  .card {
+    background: var(--ink-light);
+    border: 1px solid var(--ink-lighter);
+    border-radius: 16px;
+    padding: 32px 28px;
+    min-height: 380px;
+  }
+  .stage {
+    transition: opacity 0.2s ease;
+  }
+  .stage.stage-exit { opacity: 0; }
+  .stage--notes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 316px;
+  }
+
+  @keyframes revealIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    animation: revealIn 0.45s ease both;
+  }
+
+  /* Rough notes panel */
+  .notes-doc {
+    position: relative;
+    text-align: center;
+    padding: 10px 6px;
+  }
+  .notes-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--tertiary);
+    margin-bottom: 18px;
+  }
+  .notes-quote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    line-height: 0.5;
+    color: var(--ink-lighter);
+    margin-bottom: 6px;
+  }
+  .notes-text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15.5px;
+    line-height: 1.75;
+    color: var(--text-primary);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.9s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* Polished SOP panel */
+  .sop-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .sop-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(21px, 4vw, 26px);
+    color: var(--text-primary);
+    margin: 0 0 20px;
+    line-height: 1.25;
+  }
+  .sop-section { margin-bottom: 20px; }
+  .sop-section:last-child { margin-bottom: 0; }
+  .sop-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .sop-section p {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-primary);
+    margin: 0;
+  }
+  .sop-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .sop-steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 34px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+  .sop-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .sop-callout {
+    background: rgba(242, 161, 161, 0.08);
+    border-left: 3px solid var(--tertiary);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .sop-callout .sop-label { color: var(--tertiary); }
+  .sop-notes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .sop-notes li {
+    position: relative;
+    padding-left: 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .sop-notes li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--tertiary);
+  }
+
+  /* Closing */
+  .closing {
+    text-align: center;
+    margin-top: 34px;
+  }
+  .closing-line {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(17px, 3vw, 20px);
+    color: var(--text-primary);
+    line-height: 1.45;
+    margin: 0 0 22px;
+  }
+  .cta-btn {
+    display: inline-block;
+    text-align: center;
+    background: var(--accent);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border-radius: 9px;
+    padding: 14px 28px;
+    font-family: 'Work Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+  }
+  .cta-btn:hover { background: var(--accent-dim); transform: translateY(-1px); }
+  .cta-btn:focus-visible { outline: 2px solid var(--secondary); outline-offset: 2px; }
+
+  @media (max-width: 480px) {
+    .card { padding: 24px 18px; }
+    .seg-btn { padding: 9px 12px; font-size: 11.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <div class="eyebrow">BEFORE &rarr; AFTER</div>
+    <h1 class="h1">See messy notes become a <em>real SOP</em>.</h1>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Example">
+    <button type="button" class="tab is-active" data-index="0">Client Onboarding</button>
+    <button type="button" class="tab" data-index="1">Service Call &amp; Estimate</button>
+    <button type="button" class="tab" data-index="2">New Hire Onboarding</button>
+  </nav>
+
+  <div class="toggle-row">
+    <div class="segmented" id="segmented">
+      <div class="seg-highlight" id="segHighlight"></div>
+      <button type="button" class="seg-btn is-active" data-view="notes" id="segNotes">Rough Notes</button>
+      <span class="seg-arrow" id="segArrow">&rarr;</span>
+      <button type="button" class="seg-btn" data-view="sop" id="segSop">Polished SOP</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stage stage--notes" id="stage"></div>
+  </div>
+
+  <div class="closing">
+    <p class="closing-line">This is what a full audit turns your own process into — tailored to your business.</p>
+    <a class="cta-btn" href="BOOKING_LINK_PLACEHOLDER" target="_blank" rel="noopener noreferrer">Book a Free Audit Call</a>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var EXAMPLES = [
+    {
+      tab: "Client Onboarding",
+      notes: "When someone signs up I make them a folder in Drive, send the welcome email with the intake form, wait til they fill it out then I call to schedule the kickoff. After we talk I set them up in our project tool and just assign it to whoever's free that week.",
+      sop: {
+        title: "New Client Onboarding",
+        purpose: "Make sure every new client gets a consistent, professional start — nothing depends on memory.",
+        steps: [
+          "Create a client folder in Drive using the naming convention: [Client Name] – [Start Date].",
+          "Send the welcome email, including the intake form link.",
+          "Once the intake form is submitted, review it before scheduling.",
+          "Call or email the client to schedule the kickoff call within 2 business days of form submission.",
+          "After the kickoff call, create the client's project in [project tool].",
+          "Assign the project to a team member based on current workload, not just availability."
+        ],
+        notes: [
+          "Don't skip reviewing the intake form before the kickoff call — going in blind wastes the client's time.",
+          "If the client hasn't submitted the form within 5 days, send a friendly reminder."
+        ]
+      }
+    },
+    {
+      tab: "Service Call & Estimate",
+      notes: "Someone calls needing a quote, I ask what they need, look at my calendar, and tell them when someone can come out. Whoever answers the phone writes it on a sticky note or texts the crew. When the guy gets there he writes up an estimate by hand and calls it in.",
+      sop: {
+        title: "Service Call & Estimate Request",
+        purpose: "Ensure every incoming service request is captured accurately and routed without depending on sticky notes or memory.",
+        steps: [
+          "When a call comes in, log the customer's name, phone number, address, and issue description in [scheduling tool/shared log].",
+          "Check the schedule for the next available appointment slot.",
+          "Confirm the appointment time with the customer before ending the call.",
+          "Text or notify the assigned crew member with the job details and address.",
+          "On-site, the technician records the estimate directly in [tool/form], not on paper.",
+          "Technician calls or messages the office once the estimate is delivered, noting next steps (approved, pending, declined)."
+        ],
+        notes: [
+          "Never rely on sticky notes for job details — they get lost and cause missed appointments.",
+          "If a job is more than 30 minutes from the last stop, flag it for scheduling review before confirming the time."
+        ]
+      }
+    },
+    {
+      tab: "New Hire Onboarding",
+      notes: "When we hire someone I get their paperwork together, order their equipment, add them to payroll, tell their manager when they start, and try to have someone show them around their first day.",
+      sop: {
+        title: "New Hire Onboarding",
+        purpose: "Give every new hire a smooth, welcoming start and make sure nothing falls through the cracks before day one.",
+        steps: [
+          "Send new hire paperwork (offer letter, tax forms, handbook acknowledgment) at least 5 business days before the start date.",
+          "Order any required equipment (laptop, badge, uniform) as soon as the offer is signed.",
+          "Add the employee to payroll and benefits systems at least 3 business days before start date.",
+          "Notify the hiring manager of the confirmed start date and share the new hire's basic info.",
+          "Assign a team member as the new hire's first-day point of contact.",
+          "On day one, walk the new hire through workspace setup, key contacts, and first-week expectations."
+        ],
+        notes: [
+          "Equipment delays are the most common first-day failure point — order early, confirm arrival before the start date.",
+          "A missing \"day one buddy\" is the second most common gap — assign this at least 2 days ahead, not the morning of."
+        ]
+      }
+    }
+  ];
+
+  var state = { exampleIndex: 0, view: "notes" };
+  var typeTimer = null;
+
+  var stage = document.getElementById("stage");
+  var tabsEl = document.getElementById("tabs");
+  var segNotes = document.getElementById("segNotes");
+  var segSop = document.getElementById("segSop");
+  var segHighlight = document.getElementById("segHighlight");
+  var segArrow = document.getElementById("segArrow");
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function currentExample() {
+    return EXAMPLES[state.exampleIndex];
+  }
+
+  function buildNotesHTML() {
+    return (
+      '<div class="notes-doc">' +
+        '<div class="notes-eyebrow">ROUGH NOTES</div>' +
+        '<div class="notes-quote-mark" aria-hidden="true">&ldquo;</div>' +
+        '<p class="notes-text"><span id="typewriterTarget"></span><span class="cursor" id="cursor"></span></p>' +
+      '</div>'
+    );
+  }
+
+  function buildSopHTML(ex) {
+    var i = 0;
+    function delay() {
+      var d = Math.min(i, 12) * 45;
+      i++;
+      return d;
+    }
+
+    var html = "";
+    html += '<div class="sop-eyebrow reveal" style="animation-delay:' + delay() + 'ms">POLISHED SOP</div>';
+    html += '<h3 class="sop-title reveal" style="animation-delay:' + delay() + 'ms">' + escapeHtml(ex.sop.title) + '</h3>';
+
+    html += '<div class="sop-section">';
+    html += '<h4 class="sop-label reveal" style="animation-delay:' + delay() + 'ms">Purpose</h4>';
+    html += '<p class="reveal" style="animation-delay:' + delay() + 'ms">' + escapeHtml(ex.sop.purpose) + '</p>';
+    html += '</div>';
+
+    html += '<div class="sop-section">';
+    html += '<h4 class="sop-label reveal" style="animation-delay:' + delay() + 'ms">Steps</h4>';
+    html += '<ol class="sop-steps">';
+    ex.sop.steps.forEach(function (s) {
+      html += '<li class="reveal" style="animation-delay:' + delay() + 'ms">' + escapeHtml(s) + '</li>';
+    });
+    html += '</ol></div>';
+
+    html += '<div class="sop-section sop-callout">';
+    html += '<h4 class="sop-label reveal" style="animation-delay:' + delay() + 'ms">Notes</h4>';
+    html += '<ul class="sop-notes">';
+    ex.sop.notes.forEach(function (n) {
+      html += '<li class="reveal" style="animation-delay:' + delay() + 'ms">' + escapeHtml(n) + '</li>';
+    });
+    html += '</ul></div>';
+
+    return html;
+  }
+
+  function startTypewriter(text) {
+    if (typeTimer) clearInterval(typeTimer);
+    var target = document.getElementById("typewriterTarget");
+    var cursor = document.getElementById("cursor");
+    if (!target) return;
+    var idx = 0;
+    target.textContent = "";
+    if (cursor) cursor.style.visibility = "visible";
+    typeTimer = setInterval(function () {
+      idx += 2;
+      target.textContent = text.slice(0, idx);
+      if (idx >= text.length) {
+        clearInterval(typeTimer);
+        typeTimer = null;
+      }
+    }, 14);
+  }
+
+  function renderStage(animate) {
+    var ex = currentExample();
+
+    function paint() {
+      if (state.view === "notes") {
+        stage.className = "stage stage--notes";
+        stage.innerHTML = buildNotesHTML();
+        startTypewriter(ex.notes);
+      } else {
+        if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+        stage.className = "stage";
+        stage.innerHTML = buildSopHTML(ex);
+      }
+    }
+
+    if (animate) {
+      stage.classList.add("stage-exit");
+      window.setTimeout(function () {
+        paint();
+      }, 180);
+    } else {
+      paint();
+    }
+  }
+
+  function updateTabs() {
+    var tabButtons = tabsEl.querySelectorAll(".tab");
+    tabButtons.forEach(function (btn) {
+      var idx = parseInt(btn.getAttribute("data-index"), 10);
+      var active = idx === state.exampleIndex;
+      btn.classList.toggle("is-active", active);
+      btn.setAttribute("aria-selected", active ? "true" : "false");
+    });
+  }
+
+  function updateSegmented() {
+    var activeBtn = state.view === "notes" ? segNotes : segSop;
+    var otherBtn = state.view === "notes" ? segSop : segNotes;
+    activeBtn.classList.add("is-active");
+    otherBtn.classList.remove("is-active");
+
+    segHighlight.style.left = activeBtn.offsetLeft + "px";
+    segHighlight.style.width = activeBtn.offsetWidth + "px";
+
+    segArrow.classList.remove("is-pulsing");
+    void segArrow.offsetWidth; /* restart animation */
+    segArrow.classList.add("is-pulsing");
+  }
+
+  tabsEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".tab");
+    if (!btn) return;
+    var idx = parseInt(btn.getAttribute("data-index"), 10);
+    if (idx === state.exampleIndex) return;
+    state.exampleIndex = idx;
+    updateTabs();
+    renderStage(true);
+  });
+
+  segNotes.addEventListener("click", function () {
+    if (state.view === "notes") return;
+    state.view = "notes";
+    updateSegmented();
+    renderStage(true);
+  });
+
+  segSop.addEventListener("click", function () {
+    if (state.view === "sop") return;
+    state.view = "sop";
+    updateSegmented();
+    renderStage(true);
+  });
+
+  window.addEventListener("resize", updateSegmented);
+
+  updateTabs();
+  updateSegmented();
+  renderStage(false);
+})();
+</script>
+
+</body>
+</html>

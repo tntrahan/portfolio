@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Time Waste Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1D1145;
+    --ink-light: #2A1B5C;
+    --ink-lighter: #3A2A72;
+    --paper: #F2EFE6;
+    --brass: #0DB4B9;
+    --brass-dim: #0A8A8E;
+    --sage: #E76D89;
+    --pink-boot: #F2A1A1;
+    --text-primary: #F2EFE6;
+    --text-muted: #B8AEDD;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 48px 20px;
+    font-family: 'Work Sans', sans-serif;
+  }
+
+  button, input {
+    font-family: inherit;
+  }
+
+  .twc-option:hover {
+    border-color: var(--brass) !important;
+    background: var(--ink-lighter) !important;
+  }
+  .twc-option:focus-visible,
+  .twc-btn:focus-visible,
+  .twc-skip-link:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--brass);
+    outline-offset: 2px;
+  }
+  .twc-skip-link:hover { color: var(--text-primary) !important; }
+  .twc-restart:hover { color: var(--text-primary) !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .twc-fade { animation: none !important; }
+  }
+  @keyframes twcFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .twc-fade { animation: twcFadeIn 0.35s ease both; }
+
+  .twc-container {
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .twc-header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .twc-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--brass);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+
+  .twc-h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(24px, 5vw, 34px);
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin: 0 0 12px;
+  }
+
+  .twc-subhead {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .twc-card {
+    background: var(--ink-light);
+    border: 1px solid var(--ink-lighter);
+    border-radius: 14px;
+    padding: 28px 26px;
+  }
+
+  .twc-entry-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .twc-entry-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--brass);
+  }
+
+  .twc-entry-category {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .twc-progress-track {
+    height: 3px;
+    background: var(--ink-lighter);
+    border-radius: 2px;
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+
+  .twc-progress-fill {
+    height: 100%;
+    background: var(--brass);
+    transition: width 0.4s ease;
+  }
+
+  .twc-prompt {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin: 0 0 20px;
+  }
+
+  .twc-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .twc-option {
+    text-align: left;
+    background: transparent;
+    border: 1px solid var(--ink-lighter);
+    border-radius: 9px;
+    padding: 13px 16px;
+    color: var(--text-primary);
+    font-family: 'Work Sans', sans-serif;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    width: 100%;
+    display: block;
+  }
+
+  .twc-helper-text {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin: -8px 0 18px;
+  }
+
+  .twc-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    border: 1px solid var(--ink-lighter);
+    border-radius: 9px;
+    padding: 12px 16px;
+  }
+
+  .twc-input-prefix {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 20px;
+    color: var(--brass);
+  }
+
+  .twc-number-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    color: var(--text-primary);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .twc-input-suffix {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .twc-cta-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--brass);
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    border-radius: 9px;
+    padding: 14px 20px;
+    font-family: 'Work Sans', sans-serif;
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  .twc-cta-btn:disabled,
+  .twc-cta-btn.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .twc-nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 22px;
+    gap: 10px;
+  }
+
+  .twc-ghost-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13.5px;
+    cursor: pointer;
+    padding: 6px 4px;
+    font-family: 'Work Sans', sans-serif;
+  }
+  .twc-ghost-btn[hidden] { visibility: hidden; }
+
+  .twc-skip-link {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    margin-left: auto;
+    font-family: 'Work Sans', sans-serif;
+    transition: color 0.15s ease;
+  }
+
+  .twc-result-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--brass);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .twc-tally-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .twc-tally-block { text-align: center; }
+
+  .twc-tally-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: clamp(32px, 8vw, 44px);
+    font-weight: 600;
+    color: var(--paper);
+    line-height: 1;
+  }
+
+  .twc-tally-number.twc-accent { color: var(--sage); }
+
+  .twc-tally-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-top: 6px;
+  }
+
+  .twc-tally-divider {
+    width: 1px;
+    height: 46px;
+    background: var(--ink-lighter);
+  }
+
+  .twc-breakdown {
+    border-top: 1px solid var(--ink-lighter);
+    padding-top: 16px;
+    margin-bottom: 20px;
+  }
+
+  .twc-breakdown-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .twc-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    font-size: 14px;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--ink-lighter);
+  }
+
+  .twc-breakdown-hours {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--brass);
+    font-size: 13px;
+  }
+
+  .twc-disclaimer {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+
+  .twc-restart {
+    display: block;
+    margin: 16px auto 0;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    font-family: 'Work Sans', sans-serif;
+    transition: color 0.15s ease;
+  }
+
+  .twc-footer-note {
+    text-align: center;
+    margin-top: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    min-height: 16px;
+  }
+
+  /* remove number input spinners for a cleaner look, keyboard access unaffected */
+  .twc-number-input::-webkit-outer-spin-button,
+  .twc-number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .twc-number-input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  @media (max-width: 420px) {
+    .twc-card { padding: 22px 18px; }
+    .twc-tally-row { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="twc-container">
+  <div class="twc-header">
+    <div class="twc-eyebrow">FREE, NO-EMAIL-REQUIRED ASSESSMENT</div>
+    <h1 class="twc-h1">How many hours is your business losing each week?</h1>
+    <p class="twc-subhead" id="twc-subhead">Answer a few quick questions about how your week actually runs. Skip anything that doesn't apply.</p>
+  </div>
+
+  <div id="twc-question-view" class="twc-card twc-fade"></div>
+  <div id="twc-results-view" class="twc-card twc-fade" style="display:none;"></div>
+
+  <div class="twc-footer-note" id="twc-footer-note"></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var BOOKING_LINK = "BOOKING_LINK_PLACEHOLDER";
+
+  var QUESTIONS = [
+    {
+      id: "scheduling",
+      label: "Scheduling & appointments",
+      skippable: false,
+      prompt: "How do you currently handle scheduling and appointments?",
+      options: [
+        { text: "Phone calls, texts, or paper", hours: 5 },
+        { text: "Spreadsheet or shared calendar, updated by hand", hours: 3 },
+        { text: "Booking software, but I still confirm manually", hours: 1 },
+        { text: "Fully automated booking", hours: 0.25 }
+      ]
+    },
+    {
+      id: "invoicing",
+      label: "Invoicing & payments",
+      skippable: false,
+      prompt: "How do invoices and payment follow-ups get handled?",
+      options: [
+        { text: "Written up by hand or in a document each time", hours: 4 },
+        { text: "Spreadsheet template I fill in and send", hours: 2.5 },
+        { text: "Invoicing software, but I enter everything manually", hours: 1.5 },
+        { text: "Automated invoicing and reminders", hours: 0.3 }
+      ]
+    },
+    {
+      id: "followup",
+      label: "Customer follow-up",
+      skippable: false,
+      prompt: "How do you follow up with customers or leads?",
+      options: [
+        { text: "I try to remember, or I don't get to it", hours: 3 },
+        { text: "Manual texts, calls, or emails when I think of it", hours: 1.5 },
+        { text: "Some reminders are automated", hours: 0.75 },
+        { text: "Fully automated follow-up sequence", hours: 0.2 }
+      ]
+    },
+    {
+      id: "recordkeeping",
+      label: "Data entry & records",
+      skippable: false,
+      prompt: "How much do you re-type or re-enter the same information across tools?",
+      options: [
+        { text: "Constantly — several systems, none of them talk", hours: 5 },
+        { text: "Some duplication between a couple of tools", hours: 2.5 },
+        { text: "Mostly one system, occasional overlap", hours: 1 },
+        { text: "One clean system, no duplication", hours: 0.3 }
+      ]
+    },
+    {
+      id: "reporting",
+      label: "Reporting & decisions",
+      skippable: false,
+      prompt: "When you need numbers to make a decision, how do you get them?",
+      options: [
+        { text: "I compile everything by hand when I need it", hours: 4 },
+        { text: "Half-built spreadsheets I update sometimes", hours: 2 },
+        { text: "A dashboard I check, but data entry is manual", hours: 1 },
+        { text: "Automated, up-to-date reporting", hours: 0.3 }
+      ]
+    },
+    {
+      id: "dispatch",
+      label: "Dispatch & job routing",
+      skippable: true,
+      prompt: "For service businesses — how are jobs assigned and routed to staff?",
+      options: [
+        { text: "Phone calls and manual routing", hours: 4 },
+        { text: "Group chat or spreadsheet", hours: 2 },
+        { text: "Routing or dispatch software", hours: 0.5 },
+        { text: "Fully automated dispatch", hours: 0.1 }
+      ]
+    },
+    {
+      id: "estimates",
+      label: "Estimates & quotes",
+      skippable: true,
+      prompt: "For service businesses — how do you put together estimates or quotes?",
+      options: [
+        { text: "From scratch, every time", hours: 3 },
+        { text: "I have a template but fill it in by hand", hours: 1.5 },
+        { text: "Software with manual entry", hours: 0.75 },
+        { text: "Automated quoting", hours: 0.3 }
+      ]
+    },
+    {
+      id: "value",
+      label: "The value of your time",
+      skippable: false,
+      type: "input",
+      prompt: "Roughly, what does an hour of this work cost your business?",
+      helper: "Think about what it would cost to pay someone to do these tasks — whether that's your own time or an admin role. In many areas that starts around $14–$18/hour.",
+      defaultValue: 18
+    }
+  ];
+
+  var state = {
+    step: 0,
+    answers: {},
+    showResults: false
+  };
+
+  var questionView = document.getElementById("twc-question-view");
+  var resultsView = document.getElementById("twc-results-view");
+  var footerNote = document.getElementById("twc-footer-note");
+  var subhead = document.getElementById("twc-subhead");
+
+  var countUpFrame = null;
+
+  function animateCountUp(from, to, duration, onUpdate) {
+    if (countUpFrame) cancelAnimationFrame(countUpFrame);
+    var start = null;
+    function step(ts) {
+      if (start === null) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      onUpdate(from + (to - from) * eased);
+      if (progress < 1) {
+        countUpFrame = requestAnimationFrame(step);
+      }
+    }
+    countUpFrame = requestAnimationFrame(step);
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement("div");
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function answeredCount() {
+    return Object.keys(state.answers).length;
+  }
+
+  function hoursSoFar() {
+    var sum = 0;
+    QUESTIONS.forEach(function (q) {
+      if (q.id === "value") return;
+      var a = state.answers[q.id];
+      if (a && typeof a.hours === "number") sum += a.hours;
+    });
+    return sum;
+  }
+
+  function render() {
+    if (state.showResults) {
+      questionView.style.display = "none";
+      resultsView.style.display = "block";
+      subhead.style.display = "none";
+      renderResults();
+    } else {
+      questionView.style.display = "block";
+      resultsView.style.display = "none";
+      subhead.style.display = "block";
+      renderQuestion();
+    }
+  }
+
+  function renderQuestion() {
+    var q = QUESTIONS[state.step];
+    var html = "";
+
+    html += '<div class="twc-entry-row">';
+    html += '<span class="twc-entry-label">ENTRY ' + String(state.step + 1).padStart(2, "0") + ' / ' + String(QUESTIONS.length).padStart(2, "0") + '</span>';
+    html += '<span class="twc-entry-category">' + escapeHtml(q.label) + '</span>';
+    html += '</div>';
+
+    var pct = (state.step / QUESTIONS.length) * 100;
+    html += '<div class="twc-progress-track"><div class="twc-progress-fill" style="width:' + pct + '%"></div></div>';
+
+    html += '<p class="twc-prompt">' + escapeHtml(q.prompt) + '</p>';
+
+    if (q.type === "input") {
+      var existing = state.answers[q.id] ? state.answers[q.id].value : undefined;
+      var draftValue = existing !== undefined ? existing : q.defaultValue;
+
+      if (q.helper) {
+        html += '<p class="twc-helper-text">' + escapeHtml(q.helper) + '</p>';
+      }
+      html += '<div class="twc-input-row">';
+      html += '<span class="twc-input-prefix">$</span>';
+      html += '<input type="number" min="1" step="0.5" inputmode="decimal" id="twc-value-input" class="twc-number-input" aria-label="Dollars per hour" value="' + escapeHtml(String(draftValue)) + '">';
+      html += '<span class="twc-input-suffix">/ hour</span>';
+      html += '</div>';
+      html += '<button type="button" class="twc-btn twc-cta-btn" id="twc-continue-btn" style="margin-top:18px;">Continue</button>';
+    } else {
+      html += '<div class="twc-options-list">';
+      q.options.forEach(function (opt, i) {
+        html += '<button type="button" class="twc-option twc-btn" data-option-index="' + i + '">' + escapeHtml(opt.text) + '</button>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="twc-nav-row">';
+    html += '<button type="button" class="twc-ghost-btn twc-btn" id="twc-back-btn"' + (state.step === 0 ? ' hidden' : '') + '>&larr; Back</button>';
+    if (q.skippable) {
+      html += '<button type="button" class="twc-skip-link" id="twc-skip-btn">Doesn\'t apply to my business — skip &rarr;</button>';
+    }
+    html += '</div>';
+
+    questionView.className = "twc-card twc-fade";
+    questionView.innerHTML = html;
+
+    if (q.type === "input") {
+      var input = document.getElementById("twc-value-input");
+      var continueBtn = document.getElementById("twc-continue-btn");
+
+      function updateContinueState() {
+        var num = parseFloat(input.value);
+        var valid = !isNaN(num) && num > 0;
+        continueBtn.classList.toggle("is-disabled", !valid);
+      }
+      updateContinueState();
+
+      input.addEventListener("input", updateContinueState);
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          submitValue(q, input.value);
+        }
+      });
+      continueBtn.addEventListener("click", function () {
+        submitValue(q, input.value);
+      });
+    } else {
+      var optionButtons = questionView.querySelectorAll(".twc-option");
+      optionButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var idx = parseInt(btn.getAttribute("data-option-index"), 10);
+          selectOption(q, q.options[idx]);
+        });
+      });
+    }
+
+    var backBtn = document.getElementById("twc-back-btn");
+    if (backBtn) {
+      backBtn.addEventListener("click", goBack);
+    }
+    var skipBtn = document.getElementById("twc-skip-btn");
+    if (skipBtn) {
+      skipBtn.addEventListener("click", function () {
+        skipQuestion(q);
+      });
+    }
+
+    updateFooter();
+  }
+
+  function renderResults() {
+    var hours = hoursSoFar();
+    var hourlyValue = state.answers.value ? state.answers.value.value : 18;
+    var annualDollars = hours * hourlyValue * 52;
+
+    var breakdown = QUESTIONS.filter(function (q) {
+      return q.id !== "value" && state.answers[q.id] && state.answers[q.id].hours > 0.05;
+    }).map(function (q) {
+      return { label: q.label, hours: state.answers[q.id].hours };
+    }).sort(function (a, b) { return b.hours - a.hours; });
+
+    var html = "";
+    html += '<div class="twc-result-label">YOUR ESTIMATED WEEKLY LOSS</div>';
+    html += '<div class="twc-tally-row">';
+    html += '<div class="twc-tally-block"><div class="twc-tally-number" id="twc-hours-number">0.0</div><div class="twc-tally-unit">hours / week</div></div>';
+    html += '<div class="twc-tally-divider"></div>';
+    html += '<div class="twc-tally-block"><div class="twc-tally-number twc-accent" id="twc-dollars-number">$0</div><div class="twc-tally-unit">estimated / year</div></div>';
+    html += '</div>';
+
+    if (breakdown.length > 0) {
+      html += '<div class="twc-breakdown">';
+      html += '<div class="twc-breakdown-title">Where it\'s going</div>';
+      breakdown.forEach(function (b) {
+        html += '<div class="twc-breakdown-row"><span>' + escapeHtml(b.label) + '</span><span class="twc-breakdown-hours">' + b.hours.toFixed(1) + ' hrs/wk</span></div>';
+      });
+      html += '</div>';
+    }
+
+    html += '<p class="twc-disclaimer">This is a general estimate based on common patterns in small businesses like yours. A full audit will determine more precise numbers and a specific plan for getting that time back.</p>';
+    html += '<a href="' + escapeHtml(BOOKING_LINK) + '" class="twc-cta-btn" id="twc-book-btn" target="_blank" rel="noopener noreferrer">Book a Free Audit Call</a>';
+    html += '<button type="button" class="twc-restart" id="twc-restart-btn">Start over</button>';
+
+    resultsView.className = "twc-card twc-fade";
+    resultsView.innerHTML = html;
+
+    document.getElementById("twc-restart-btn").addEventListener("click", restart);
+
+    var hoursEl = document.getElementById("twc-hours-number");
+    var dollarsEl = document.getElementById("twc-dollars-number");
+    animateCountUp(0, hours, 900, function (v) {
+      hoursEl.textContent = v.toFixed(1);
+    });
+    animateCountUp(0, annualDollars, 1100, function (v) {
+      dollarsEl.textContent = "$" + Math.round(v).toLocaleString();
+    });
+
+    updateFooter();
+  }
+
+  function updateFooter() {
+    if (!state.showResults && answeredCount() > 0) {
+      footerNote.textContent = answeredCount() + " of " + QUESTIONS.length + " answered";
+    } else {
+      footerNote.textContent = "";
+    }
+  }
+
+  function selectOption(q, option) {
+    state.answers[q.id] = option;
+    goNext();
+  }
+
+  function submitValue(q, rawValue) {
+    var num = parseFloat(rawValue);
+    if (isNaN(num) || num <= 0) return;
+    state.answers[q.id] = { value: num };
+    goNext();
+  }
+
+  function skipQuestion(q) {
+    delete state.answers[q.id];
+    goNext();
+  }
+
+  function goNext() {
+    if (state.step < QUESTIONS.length - 1) {
+      state.step += 1;
+      render();
+    } else {
+      state.showResults = true;
+      render();
+    }
+  }
+
+  function goBack() {
+    if (state.step > 0) {
+      state.step -= 1;
+      render();
+    }
+  }
+
+  function restart() {
+    state.answers = {};
+    state.step = 0;
+    state.showResults = false;
+    render();
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
