@@ -271,6 +271,66 @@
     margin: 0 auto;
     overflow: hidden;
   }
+  .calendly-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ---------------- Cookie consent banner ---------------- */
+  .cookie-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    padding: 14px 24px;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.28);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  .cookie-banner--visible { transform: translateY(0); }
+  .cookie-text {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 720px;
+  }
+  .cookie-text a { color: var(--accent); text-decoration: underline; }
+  .cookie-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .cookie-accept { padding: 10px 22px; font-size: 14px; }
+  .cookie-decline {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--muted);
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    text-decoration: underline;
+    padding: 6px 4px;
+  }
+  .cookie-decline:hover { color: var(--text); }
+  @media (prefers-reduced-motion: reduce) {
+    .cookie-banner { transition: none; }
+  }
 
   /* ---------------- Footer ---------------- */
   footer {
@@ -439,10 +499,12 @@
       </div>
 
       <div class="card calendly-wrap">
-        <!-- Calendly inline widget begin -->
-        <div class="calendly-inline-widget" data-url="https://calendly.com/tnjones12?hide_gdpr_banner=1&background_color=ffffff&primary_color=0DB4B9" style="min-width:320px;height:700px;"></div>
-        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        <!-- Calendly inline widget end -->
+        <!-- Calendly loads only after cookie consent (or on explicit request) -->
+        <div id="calendly-embed" class="calendly-inline-widget" data-url="https://calendly.com/tnjones12?hide_gdpr_banner=1&background_color=ffffff&primary_color=0DB4B9" style="min-width:320px;height:700px;" hidden></div>
+        <div id="calendly-placeholder" class="calendly-placeholder">
+          <p>The booking calendar uses cookies from Calendly.</p>
+          <button type="button" class="btn" id="calendly-load-btn">Click to load booking widget</button>
+        </div>
       </div>
     </div>
   </section>
@@ -461,6 +523,71 @@
     </div>
   </div>
 </footer>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" class="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent" hidden>
+  <p class="cookie-text">This site uses cookies from embedded tools like Calendly to help you book calls. See our <a href="/privacy">Privacy Policy</a> for details.</p>
+  <div class="cookie-actions">
+    <button type="button" class="btn cookie-accept" id="cookie-accept">Accept</button>
+    <button type="button" class="cookie-decline" id="cookie-decline">Decline</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'cookieConsent';
+    var calendlyLoaded = false;
+
+    function loadCalendly() {
+      var embed = document.getElementById('calendly-embed');
+      var placeholder = document.getElementById('calendly-placeholder');
+      if (placeholder) placeholder.hidden = true;
+      if (embed) embed.hidden = false;
+      if (!calendlyLoaded) {
+        var s = document.createElement('script');
+        s.src = 'https://assets.calendly.com/assets/external/widget.js';
+        s.async = true;
+        document.body.appendChild(s);
+        calendlyLoaded = true;
+      }
+    }
+
+    function getConsent() {
+      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+    }
+    function setConsent(value) {
+      try { localStorage.setItem(STORAGE_KEY, value); } catch (e) {}
+    }
+
+    // Let visitors load the widget on demand even if they declined.
+    var loadBtn = document.getElementById('calendly-load-btn');
+    if (loadBtn) loadBtn.addEventListener('click', loadCalendly);
+
+    var consent = getConsent();
+    if (consent === 'accepted') {
+      // Returning visitor who opted in: load normally, no banner.
+      loadCalendly();
+    } else if (consent !== 'declined') {
+      // No choice yet: show the banner (placeholder stays until they choose).
+      var banner = document.getElementById('cookie-banner');
+      banner.hidden = false;
+      // Trigger the slide-in transition on the next frame.
+      requestAnimationFrame(function () { banner.classList.add('cookie-banner--visible'); });
+
+      document.getElementById('cookie-accept').addEventListener('click', function () {
+        setConsent('accepted');
+        banner.hidden = true;
+        loadCalendly();
+      });
+      document.getElementById('cookie-decline').addEventListener('click', function () {
+        setConsent('declined');
+        banner.hidden = true;
+        // Calendly is not loaded; the placeholder remains for on-demand loading.
+      });
+    }
+    // consent === 'declined': do nothing — placeholder stays, no script loaded.
+  })();
+</script>
 
 </body>
 </html>
