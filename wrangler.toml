@@ -1,0 +1,7 @@
+name = "portfolio"
+compatibility_date = "2025-01-01"
+
+# Serve this repo as a static site (no Worker script needed).
+# `directory = "./"` publishes index.html, projects/, and the headshot as-is.
+[assets]
+directory = "./"
